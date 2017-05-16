@@ -93,7 +93,7 @@ namespace Lesson1505Hometask
             Console.WriteLine(string.Join(" | ", firstList.Except(secondList).Union(secondList.Except(firstList))) + "\n");
 
             Console.WriteLine("---- 2.4 Sort the combined list by the number of vowels");
-            Console.WriteLine(string.Join(" | ", firstList.Concat(secondList).OrderByDescending(x => x, new VowelsComparer())) + "\n");
+            Console.WriteLine(string.Join(" | ", firstList.Concat(secondList).OrderBy(x => x, new VowelsComparer())) + "\n");
 
             Console.WriteLine("__________________________________________________________________________________\n");
 
