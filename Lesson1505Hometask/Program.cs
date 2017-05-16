@@ -105,10 +105,40 @@ namespace Lesson1505Hometask
                 new Car { CarId = 5, Color = "White", Model = "Tesla S", PersonId = 3, CreationDate = new DateTime(2012, 4, 1) }
             };
 
-            Console.WriteLine("---- 3.1 Display the owner name and his car (name repeat is possible)");
-            //Console.WriteLine(string.Join("\n", persons.GroupJoin(cars, person => person, car => persons.)
+            Console.WriteLine("---- 3.1 Display the owner name and his cars (name repeat is possible)");            
+            Console.WriteLine(string.Join("\n", persons.Join(   cars, 
+                                                                p => p.PersonId,
+                                                                c => c.PersonId,
+                                                                (p, c) => $"{p.FullName} has {c.Model}"
+                                                             )) + "\n");
 
+            Console.WriteLine("---- 3.2 Display the owner name and number of his cars");
+            Console.WriteLine(string.Join("\n", persons.GroupJoin(  cars, 
+                                                                    p => p.PersonId, 
+                                                                    c => c.PersonId, 
+                                                                    (p, c) => $"{p.FullName} has {c.Select(x => x.Model).Count()} cars"
+                                                                 ))  + "\n");
+
+            Console.WriteLine("---- 3.3 Display the owners of blue cars");
+            //Console.WriteLine(string.Join("\n", persons.GroupJoin(cars,
+            //                                                        p => p.PersonId,
+            //                                                        c => c.PersonId,
+            //                                                        (p, c) => new
+            //                                                        {
+            //                                                            name = p.FullName,
+            //                                                            color = c.Select(x => x.Color)
+            //                                                        }
+            //                                                        )
+            //                                                        .Where(z => z.color.Contains("Blue"))) + "\n"); //z => z.color == ("Blue")
+
+            Console.WriteLine(string.Join("\n", persons.Join(   cars,
+                                                                p => p.PersonId,
+                                                                c => c.PersonId,
+                                                                (p, c) => $"{p.FullName} has {c.Color} car"
+                                                             )
+                                                             .Where(x => x.Contains("Blue"))) + "\n");
             Console.ReadLine();
+
         }
     }
 }
