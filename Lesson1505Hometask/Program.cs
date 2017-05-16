@@ -21,25 +21,16 @@ namespace Lesson1505Hometask
 
     class VowelsComparer : IComparer<string>
     {
-        private int totalVowels(string s)
-        {
-            int totalVowels = 0;
-            foreach (char c in s.ToLower())
-            {
-                if ((c == 'a') || (c == 'e') || (c == 'i') || (c == 'o') || (c == 'u') || (c == 'y'))
-                {
-                    totalVowels++;
-                }
-            }
-            return totalVowels;
-        }
         public int Compare(string x, string y)
         {
-            if (totalVowels(x) > totalVowels(y))
+            string vowels = "aeiouy";
+            int xTotalVolwes = x.ToLower().Count(c => vowels.Contains(c));
+            int yTotalVolwes = y.ToLower().Count(c => vowels.Contains(c));
+            if (xTotalVolwes > yTotalVolwes)
             {
                 return 1;
             }
-            if (totalVowels(x) < totalVowels(y))
+            if (xTotalVolwes < yTotalVolwes)
             {
                 return -1;
             }
