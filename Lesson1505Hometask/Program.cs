@@ -41,6 +41,22 @@ namespace Lesson1505Hometask
         }
     }
 
+    class UniqueCarsEqualityComparer : IEqualityComparer<Car>
+    {
+        public bool Equals(Car x, Car y)
+        {
+            if (x.Model == y.Model && x.Color == y.Color)
+                return true;
+            else
+                return false;
+        }
+
+        public int GetHashCode(Car obj)
+        {
+            return obj.Color.GetHashCode() + obj.Model.GetHashCode();
+        }
+    }
+
     class Progarmm
     {
         static void Main()
@@ -139,31 +155,13 @@ namespace Lesson1505Hometask
                                                              .Where(x => x.Contains("Blue"))) + "\n");
 
             Console.WriteLine("---- 3.4 Display the owners of uniq cars (uniq model and color)");
-            Console.WriteLine(string.Join("\n", cars.Select( p => new { color = p.Color, model = p.Model}).Distinct()) + "\n");
+            Console.WriteLine(string.Join("\n", cars.Distinct(new UniqueCarsEqualityComparer()).GroupJoin(persons,
+                                                                                                    c => c.PersonId,
+                                                                                                    p => p.PersonId,
+                                                                                                    (c, p) =>
+                                                                                                    $"{String.Join("", p.Select(x => x.FullName))} has unique car, it is {c.Color} {c.Model}"
+                                                                                                    )) + "\n");
 
-
-            Console.WriteLine(string.Join("\n", persons.GroupJoin(cars,
-                                                                    p => p.PersonId,
-                                                                    c => c.PersonId,
-                                                                    (p, c) => new
-                                                                    {
-                                                                        name = p.FullName,
-                                                                        color = string.Join(" ", c.Select(x => x.Color)),
-                                                                        model = string.Join(" ", c.Select(x => x.Model))
-                                                                    }
-                                                                    )
-                                                                    .Distinct()) + "\n"); //z => z.color == ("Blue")
-
-            Console.WriteLine(string.Join("\n", cars.Join(  persons,
-                                                            c => c.PersonId,
-                                                            p => p.PersonId,
-                                                            (c, p) => new
-                                                            {
-                                                                name = p.FullName,
-                                                                color = c.Color,
-                                                                model = c.Model
-                                                            })
-                                                            ) + "\n");
             Console.ReadLine();
 
         }
