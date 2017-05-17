@@ -159,9 +159,10 @@ namespace Lesson1505Hometask
                                                                                                     c => c.PersonId,
                                                                                                     p => p.PersonId,
                                                                                                     (c, p) =>
-                                                                                                    $"{String.Join("", p.Select(x => x.FullName))} has unique car, it is {c.Color} {c.Model}"
+                                                                                                    $"{string.Join("", p.Select(x => x.FullName))} has unique car, it is {c.Color} {c.Model}"
                                                                                                     )) + "\n");
-
+            Console.WriteLine("____________________________________________");
+            Console.WriteLine(string.Join(", ", Enumerable.Range(10, 41)));
             Console.ReadLine();
 
         }
