@@ -45,10 +45,7 @@ namespace Lesson1505Hometask
     {
         public bool Equals(Car x, Car y)
         {
-            if (x.Model == y.Model && x.Color == y.Color)
-                return true;
-            else
-                return false;
+            return (x.Model == y.Model && x.Color == y.Color);
         }
 
         public int GetHashCode(Car obj)
@@ -121,32 +118,21 @@ namespace Lesson1505Hometask
                 new Car { CarId = 5, Color = "White", Model = "Tesla S", PersonId = 3, CreationDate = new DateTime(2012, 4, 1) }
             };
 
-            Console.WriteLine("---- 3.1 Display the owner name and his cars (name repeat is possible)");            
-            Console.WriteLine(string.Join("\n", persons.Join(   cars, 
+            Console.WriteLine("---- 3.1 Display the owner name and his cars (name repeat is possible)");
+            Console.WriteLine(string.Join("\n", persons.Join(cars,
                                                                 p => p.PersonId,
                                                                 c => c.PersonId,
                                                                 (p, c) => $"{p.FullName} has {c.Model}"
                                                              )) + "\n");
 
             Console.WriteLine("---- 3.2 Display the owner name and number of his cars");
-            Console.WriteLine(string.Join("\n", persons.GroupJoin(  cars, 
-                                                                    p => p.PersonId, 
-                                                                    c => c.PersonId, 
+            Console.WriteLine(string.Join("\n", persons.GroupJoin(cars,
+                                                                    p => p.PersonId,
+                                                                    c => c.PersonId,
                                                                     (p, c) => $"{p.FullName} has {c.Select(x => x.Model).Count()} cars"
-                                                                 ))  + "\n");
+                                                                 )) + "\n");
 
             Console.WriteLine("---- 3.3 Display the owners of blue cars");
-            //Console.WriteLine(string.Join("\n", persons.GroupJoin(cars,
-            //                                                        p => p.PersonId,
-            //                                                        c => c.PersonId,
-            //                                                        (p, c) => new
-            //                                                        {
-            //                                                            name = p.FullName,
-            //                                                            color = string.Join(" ", c.Select(x => x.Color))
-            //                                                        }
-            //                                                        )
-            //                                                        .Where(z => z.color.Contains("Blue"))) + "\n"); //z => z.color == ("Blue")
-
             Console.WriteLine(string.Join("\n", persons.Join(cars,
                                                                 p => p.PersonId,
                                                                 c => c.PersonId,
@@ -161,8 +147,51 @@ namespace Lesson1505Hometask
                                                                                                     (c, p) =>
                                                                                                     $"{string.Join("", p.Select(x => x.FullName))} has unique car, it is {c.Color} {c.Model}"
                                                                                                     )) + "\n");
-            Console.WriteLine("____________________________________________");
-            Console.WriteLine(string.Join(", ", Enumerable.Range(10, 41)));
+
+            //1111111111111111
+            var tempM1 = cars.GroupBy(x => new { x.Color, x.Model });
+            var temp1 = tempM1.Select(x => string.Join("\n", x.Select(z => $"{z.Color}, {z.Model}")));
+
+            //222222222222222222222
+            var tempM2 = tempM1.Where(x => x.Count() == 1);
+            var temp2 = tempM2.Select(x => string.Join("\n", x.Select(z => $"{z.Color}, {z.Model}")));
+
+            //33333333333333333
+            var tempM3 = tempM2.Select(x => new { PersonId = x.First().PersonId, Color = x.First().Color, Model = x.First().Model});
+            var temp3 = tempM3;
+
+            //44444444444444444
+            var tempM4 = tempM3.Join(persons, x => x.PersonId, y => y.PersonId, (x, y) => y.FullName);
+            var temp4 = tempM4;
+
+            //5555555555555555555
+            var tempM5 = tempM4.Distinct();
+            var temp5 = tempM5;
+
+
+            Console.WriteLine("\n----------- 1. Grouping all cars in anonymous type (color model only)");
+            Console.WriteLine(string.Join("\n", temp1));
+            Console.WriteLine("\n----------- 2. Select all cars in anonymous type that occur only once (unique cars)");
+            Console.WriteLine(string.Join("\n", temp2));
+            Console.WriteLine("\n----------- 3. Creating anonymous collection of unique car owners");
+            Console.WriteLine(string.Join("\n", temp3));
+            Console.WriteLine("\n----------- 4. Joining anonymous owners with persons collection (getting owner's name)");
+            Console.WriteLine(string.Join("\n", temp4));
+            Console.WriteLine("\n----------- 5. Removing duplicate names");
+            Console.WriteLine(string.Join("\n", temp5));
+
+            //Console.WriteLine(string.Join("\n", cars.GroupBy( x => new { x.Color, x.Model } ).
+            //                                         Where  ( x => x.Count() == 1 ).
+            //                                         Select ( x => new { PersonId = x.First().PersonId } ).
+            //                                         Join   ( persons, 
+            //                                                  x => x.PersonId, 
+            //                                                  y => y.PersonId, 
+            //                                                  (x, y) => y.FullName ).
+            //                                         Distinct()
+            //                                         ) + "\n");
+            //Console.WriteLine("____________________________________________");
+            //Console.WriteLine(string.Join(", ", Enumerable.Range(10, 41)));
+
             Console.ReadLine();
 
         }
